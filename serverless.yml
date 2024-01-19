@@ -10,14 +10,31 @@ provider:
       Action:
         - dynamodb:*
       Resource:
-        - arn:aws:dynamodb:us-west-2:851452142768:table/TaskTable
+        - arn:aws:dynamodb:us-west-2:851452142763:table/TaskTable
+package:
+  individually: true
+  patterns:
+    - "!*/**"
+
 functions:
-  api:
-    handler: index.hello
+  hello:
+    handler: src/index.hello
+    package:
+      patterns:
+        - "src/index.js"
     events:
       - httpApi:
           path: /
           method: get
+  createTask:
+    handler: src/addTask.create
+    package:
+      patterns:
+        - "src/addTask.js"
+    events:
+      - httpApi:
+          path: /tasks
+          method: post
 resources:
   Resources:
     TaskTable:
